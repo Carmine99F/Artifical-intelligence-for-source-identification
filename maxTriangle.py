@@ -44,7 +44,7 @@ def getMaxTraingle(coordinates ,maxCoordinate:list):
                     print("Non ci sono")
                 print(list(pilitriangle.exterior.xy))
                 """
-                #arrayTriangles.append(list(pilitriangle.exterior.coords))
+            #arrayTriangles.append(list(pilitriangle.exterior.coords))
             else:
                 print("Non è interno")
         array3DTriangles=np.array(arrayTriangles)
