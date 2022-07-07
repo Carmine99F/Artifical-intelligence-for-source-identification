@@ -24,63 +24,57 @@ infoCentraline={
         "lon": 14.819923
     }
 }
-geovuoto={
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
+# geovuoto={
+#   "type": "FeatureCollection",
+#   "features": [
+#     {
+#       "type": "Feature",
+#       "properties": {
+#       },
+#       "geometry": {
+#         "type": "Polygon",
+#         "coordinates": [
+#           [
             
-          ]
-        ]
-      }
-    }
-  ]
-}
+#           ]
+#         ]
+#       }
+#     }
+#   ]
+# }
 
 
 #Per ogni nome delle centraline prendiamo le infotmazioni realtive  al vento e al pm
 #Mettiamo ogni oggetto json che ci viene restituito in un array
 #dictInfoCentraline=[]
 jsonCentraline={}
+listPm10=[]
 for item in arrayCentraline:
     #print(item)
     #ci prendiamo lat e lon dal backend per ogni sensore
-    arraycoo=[infoCentraline[item]["lon"],infoCentraline[item]["lat"]]
-    geovuoto["features"][0]['geometry']["coordinates"][0].append(arraycoo)
-    objectInfo= ri.getInfo(item)
+    #arraycoo=[infoCentraline[item]["lon"],infoCentraline[item]["lat"]]
+    #geovuoto["features"][0]['geometry']["coordinates"][0].append(arraycoo)
+    objectInfo= ri.getInfo(item) #contiene la lista dei valori lkegati al pm e al vento senza il nome della centralina
     #print("Type objectInfo",type(objectInfo))
     #print(objectInfo)
     if objectInfo is not None:
-        centralina={item : objectInfo}
+        print("Pm10")
+        print(objectInfo["pm10"])
+        listPm10.append(objectInfo["pm10"])
+        #centralina={item : objectInfo}
         #dictInfoCentraline.append(centralina)
         jsonCentraline.update({item:objectInfo})
+
+#controlliamo se almeno uno dei valori del pm10 è maggiore di 50
+if any(i >50 for i in listPm10):
+    print("Ok c'è un elemento maggiore di 50")
+else:
+    print("Non c'è nessun elemento maggiore di 50")
 
 print("JsonCentraline")
 print(json.dumps(jsonCentraline,indent=4))
 print("---------------------------------------------------------")
-#Costruzione diu un Json del tipo { "NomeCentralina": 
-# {oggetto che contiene le varie coppie chiave valore relative alle info sul vento e pm}}
-"""        
-jsonCentraline={}
 
-print("Chiave ",list(dictInfoCentraline[0].keys())[0] )
-print(type(dictInfoCentraline[0].keys()))
-for item in dictInfoCentraline:
-    element=dict(item)
-    chiaveCentralina=list(element.keys())[0]
-    objectCentralina=list(element.values())[0]
-
-    jsonCentraline.update({chiaveCentralina:objectCentralina})
-
-#print(jsonCentraline)
-print(json.dumps(jsonCentraline,indent=4))
-"""
     
 
 #trovare quello con pm10 Massimo
@@ -109,12 +103,12 @@ print(coordinateMax)
 
 
 
-geovuoto["features"][0]['geometry']["coordinates"][0].append(geovuoto["features"][0]['geometry']["coordinates"][0][0])
+#geovuoto["features"][0]['geometry']["coordinates"][0].append(geovuoto["features"][0]['geometry']["coordinates"][0][0])
 #print(geovuoto)
 
 
-with open("testauto.geojson","w") as fp:
-    json.dump(geovuoto,fp)
+#with open("testauto.geojson","w") as fp:
+    #json.dump(geovuoto,fp)
     
 
 def getMaxCoordinates():

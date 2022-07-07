@@ -7,7 +7,7 @@ import requests
 import time 
 import requestInformation
 import maxTriangle as mt
-import centraline
+import centralineModule as centraline
 
 
 #arrayCentraline=['ITCAMMON134567','ITCAMMON334567','ITCAMMON444567']
@@ -58,31 +58,11 @@ for item in arrayCentraline:
      #ci prendiamo lat e lon dal backend per ogni sensore
      arraycoo=[infoCentraline[item]["lon"],infoCentraline[item]["lat"]]
      geovuoto["features"][0]['geometry']["coordinates"][0].append(arraycoo)
-    #  #objectInfo= requestInformation.getInfo(item)
-    #  #print("Type objectInfo",type(objectInfo))
-    #  #print(objectInfo)
-    #  if objectInfo is not None:
-    #      cenntralina={item : objectInfo}
-    #      dictInfoCentraline.append(cenntralina)
-    #      #print(infoCentralina)
-
-#     time.sleep(1)
-# print("Dizionario ")
-# print(dictInfoCentraline)
-# print("________________________")
-
-
-
-
+    
 geovuoto["features"][0]['geometry']["coordinates"][0].append(geovuoto["features"][0]['geometry']["coordinates"][0][0])
 # print(geovuoto)
 
-
-
-
 #########################################################################################
-
-
 
 
 directory="coordinates/"
@@ -102,7 +82,8 @@ geometry=features["geometry"]
 coordinates=geometry["coordinates"][0]
 
 listTraingles=tm.traingulatePolygon(coordinates)
-maxCentraline=centraline.getMaxCoordinates()
+#maxCentraline=centraline.getMaxCoordinates()
+maxCentraline=centraline.getMaxCoordinates(arrayCentraline,infoCentraline)
 print("Max centraline : ",maxCentraline)
 print(type(maxCentraline))
 #listTraingles=mt.getMaxTraingle(coordinates,maxCentraline)

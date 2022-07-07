@@ -23,17 +23,17 @@ def getInfo(name):
     if response.text != "":
         arrayInfoCentraline=[]
         infoJson=json.loads(str(response.text))
-        if float(infoJson["pm10"]) > 50:
-            dataJson={
+        #if float(infoJson["pm10"]) > 50:
+        dataJson={
                 "direzione_vento":float(infoJson["direzione_vento"]),
                 "gas_resistance":float(infoJson["gas_resistance"]),
                 "intensita_vento":float(infoJson["intensita_vento"]),
                 "pm10":float(infoJson["pm10"]),
                 "pm2_5":float(infoJson["pm2_5"])
-            }
+        }
             #print(dataJson)
-            return dataJson
-        return None
+        return dataJson
+        #return None
             #arrayInfoCentraline.append(dataJson)
         #return arrayInfoCentraline
     else:
