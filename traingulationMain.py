@@ -6,98 +6,117 @@ import geojson
 import requests
 import time 
 import requestInformation
-
-# url="https://square.sensesquare.eu:5001/download"
-# dati={
-#     "apikey":"4BSFRYMNPZ0J",
-#     "req_type":"hourly",
-#     "zoom":5,
-#     "start_hour":0,
-#     "end_hour":23,
-#     "format":"json",
-#     "fonti":"ssq",
-#     "req_centr":"ITCAMMON134567",
-#     "start_date":"2022-03-27",
-#     "end_date":"2022-03-27"
-# }
-
-# response=requests.post(url,data=dati)
-# print(response.status_code)
-# print(response.text)
-# time.sleep(3000)
+import maxTriangle as mt
+import centraline
 
 
+#arrayCentraline=['ITCAMMON134567','ITCAMMON334567','ITCAMMON444567']
 arrayCentraline=['ITCAMMON134567','ITCAMMON234567','ITCAMMON334567','ITCAMMON444567']
+
 infoCentraline={
-    "ITCAMMON134567":{
-        "lat":40.821009,
-        "lon":14.810876
-    },
-    "ITCAMMON234567":{  
-        "lat": 40.828705,
-        "lon": 14.801567
-    },
-    "ITCAMMON334567":{
-        "lat": 40.828199,
-        "lon": 14.809813
-    },
-    "ITCAMMON444567":{
-        "lat": 40.824999,
-        "lon": 14.819923
-    }
+     "ITCAMMON134567":{
+         "lat":40.821009,
+         "lon":14.810876
+     },
+     "ITCAMMON234567":{  
+         "lat": 40.828705,
+         "lon": 14.801567
+     },
+     "ITCAMMON334567":{
+         "lat": 40.828199,
+         "lon": 14.809813
+     },
+     "ITCAMMON444567":{
+         "lat": 40.824999,
+         "lon": 14.819923
+     }
 }
+
 geovuoto={
-  "type": "FeatureCollection",
-  "features": [
-    {
-      "type": "Feature",
-      "properties": {
-      },
-      "geometry": {
-        "type": "Polygon",
-        "coordinates": [
-          [
+   "type": "FeatureCollection",
+   "features": [
+     {
+       "type": "Feature",
+       "properties": {
+       },
+       "geometry": {
+         "type": "Polygon",
+         "coordinates": [
+           [
             
-          ]
-        ]
-      }
-    }
-  ]
-}
+           ]
+         ]
+       }
+     }
+   ]
+ }
 
+
+dictInfoCentraline=[]
 for item in arrayCentraline:
+     print(item)
+     #ci prendiamo lat e lon dal backend per ogni sensore
+     arraycoo=[infoCentraline[item]["lon"],infoCentraline[item]["lat"]]
+     geovuoto["features"][0]['geometry']["coordinates"][0].append(arraycoo)
+    #  #objectInfo= requestInformation.getInfo(item)
+    #  #print("Type objectInfo",type(objectInfo))
+    #  #print(objectInfo)
+    #  if objectInfo is not None:
+    #      cenntralina={item : objectInfo}
+    #      dictInfoCentraline.append(cenntralina)
+    #      #print(infoCentralina)
 
-    #ci prendiamo lat e lon dal backend per ogni sensore
-    arraycoo=[infoCentraline[item]["lon"],infoCentraline[item]["lat"]]
-    geovuoto["features"][0]['geometry']["coordinates"][0].append(arraycoo)
-    
+#     time.sleep(1)
+# print("Dizionario ")
+# print(dictInfoCentraline)
+# print("________________________")
+
+
+
+
 geovuoto["features"][0]['geometry']["coordinates"][0].append(geovuoto["features"][0]['geometry']["coordinates"][0][0])
-print(geovuoto)
+# print(geovuoto)
+
+
+
+
+#########################################################################################
+
+
+
 
 directory="coordinates/"
-filename="cosenza.geojson"
+filename="ProvaMax.geojson"
 locationFile=directory+""+filename
 
-# with open(locationFile,"r") as f:
-#     jsonCoordinates=json.load(f)
+#with open(locationFile,"r") as f:
+      #jsonCoordinates=json.load(f)
+
 jsonCoordinates=geovuoto  
 
-with open("testauto.geojson","w") as fp:
-    json.dump(jsonCoordinates,fp)
+# with open("testauto.geojson","w") as fp:
+#     json.dump(jsonCoordinates,fp)
       
 features=(jsonCoordinates["features"][0])
 geometry=features["geometry"]
 coordinates=geometry["coordinates"][0]
 
 listTraingles=tm.traingulatePolygon(coordinates)
+maxCentraline=centraline.getMaxCoordinates()
+print("Max centraline : ",maxCentraline)
+print(type(maxCentraline))
+#listTraingles=mt.getMaxTraingle(coordinates,maxCentraline)
 
 if listTraingles is not None:
+    print("Triangoli")
+    print(type(listTraingles))
+    print(listTraingles)
     #print("Array non vuoto",type(listTraingles))
     geoJsonObject= {"type":"FeatureCollection","features":
                 [
                     {
                         "type":"Feature","properties":
-                            {"stroke":"#ff0000","stroke-width":2,"stroke-opacity":1,"fill":"#555555","fill-opacity":0.5},
+                            {"stroke":"#C70039","stroke-width":2,"stroke-opacity":1,"fill":"#BEF655","fill-opacity":0.5},
                         "geometry":{"type":"Polygon","coordinates":listTraingles.tolist()}
                     }
                 ]
@@ -108,6 +127,7 @@ if listTraingles is not None:
     #outputfile=str(filename).replace("coordinates","result")
     #print("Output File",outputfile)
     outputfile="result/"+filename.split(".")[0] + "mod.geojson"
+    print(outputfile)
     #outputfile=filename.split(".")[0] + "mod.geojson"
     try:
         with open(outputfile,'w') as f:

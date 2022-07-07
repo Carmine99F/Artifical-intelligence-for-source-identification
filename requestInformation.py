@@ -1,27 +1,28 @@
+from textwrap import indent
 import requests
 import json
 
 def getInfo(name):
     url="https://square.sensesquare.eu:5001/download"
-    arrayInfoCentraline=[]
+    #arrayInfoCentraline=[]
     #arrayCentraline=['ITCAMMON134567','ITCAMMON234567','ITCAMMON334567','ITCAMMON444567']
-    for i in range(23):
-        dati={
-            "apikey":"4BSFRYMNPZ0J",
-            "req_type":"hourly",
-            "zoom":5,
-            "start_hour":i,
-            "end_hour":i,
-            "format":"json",
-            "fonti":"ssq",
-            "req_centr":"ITCAMMON134567",
-            "start_date":"2022-03-27",
-            "end_date":"2022-03-27"
-        }
-        response=requests.post(url,data=dati)
+    #for i in range(23):
+    dati={
+        "apikey":"4BSFRYMNPZ0J",
+        "req_type":"daily",#daily,hourly
+        "zoom":5,
+        "start_hour":00,
+        "end_hour":23,
+        "format":"json",
+        "fonti":"ssq",
+        "req_centr":name,
+        "start_date":"2022-03-27",
+        "end_date":"2022-03-27"
+    }
+    response=requests.post(url,data=dati)
+    if response.text != "":
+        arrayInfoCentraline=[]
         infoJson=json.loads(str(response.text))
-        #print(infoJson)
-        #print(infoJson["ID"])
         if float(infoJson["pm10"]) > 50:
             dataJson={
                 "direzione_vento":float(infoJson["direzione_vento"]),
@@ -30,9 +31,14 @@ def getInfo(name):
                 "pm10":float(infoJson["pm10"]),
                 "pm2_5":float(infoJson["pm2_5"])
             }
-            arrayInfoCentraline.append(dataJson)
-    return arrayInfoCentraline
-    
+            #print(dataJson)
+            return dataJson
+        return None
+            #arrayInfoCentraline.append(dataJson)
+        #return arrayInfoCentraline
+    else:
+        print("Response vuota")
+        return None
 
 #print(arrayInfoCentraline)
 # print(len(arrayInfoCentraline))

@@ -20,11 +20,18 @@ def traingulatePolygon(coordinates):
         triangles=triangulate(points)
         arrayTriangles=[]
         for triangle in triangles:
+            print("Single Triangle")
+            print(triangle)
             #print("Tipo triangolo",type(triangle))
             #print(triangle.within(points))
             if triangle.within(poly):
                 #print("è interno")
                 pilitriangle=Poli(triangle)
+                #listCoordinateTriangolo=list(pilitriangle.exterior.coords)
+                #print("Elemento 0")
+                #print(listCoordinateTriangolo[0])
+                #print("PiliTriangle")
+                #print(list(pilitriangle.exterior.coords))
                 arrayTriangles.append(list(pilitriangle.exterior.coords))
             else:
                 print("Non è interno")
