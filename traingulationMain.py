@@ -3,11 +3,9 @@ from textwrap import indent
 from urllib import response
 import triangulationModule as tm 
 import geojson
-import requests
 import time 
-import requestInformation
-import maxTriangle as mt
 import centralineModule as centraline
+import maxTriangleByCentraline as mtbc
 
 
 #arrayCentraline=['ITCAMMON134567','ITCAMMON334567','ITCAMMON444567']
@@ -62,7 +60,6 @@ for item in arrayCentraline:
 geovuoto["features"][0]['geometry']["coordinates"][0].append(geovuoto["features"][0]['geometry']["coordinates"][0][0])
 # print(geovuoto)
 
-#########################################################################################
 
 
 directory="coordinates/"
@@ -81,39 +78,46 @@ features=(jsonCoordinates["features"][0])
 geometry=features["geometry"]
 coordinates=geometry["coordinates"][0]
 
-listTraingles=tm.traingulatePolygon(coordinates)
-#maxCentraline=centraline.getMaxCoordinates()
-maxCentraline=centraline.getMaxCoordinates(arrayCentraline,infoCentraline)
-print("Max centraline : ",maxCentraline)
-print(type(maxCentraline))
-#listTraingles=mt.getMaxTraingle(coordinates,maxCentraline)
+#listTraingles=tm.traingulatePolygon(coordinates)
+#maxCentralina1=centraline.getMaxCoordinates()
+maxCentralina1 , maxCentralina2,maxCentralina3=centraline.getMaxCoordinates(arrayCentraline,infoCentraline)
+if maxCentralina1 is not None and maxCentralina2 is not None and maxCentralina3 is not None:
+    listTraingles=tm.traingulatePolygon(coordinates)
+    triangleMaxPM10=mtbc.getMaxTraingle(listTraingles,maxCentralina1,maxCentralina2,maxCentralina3)
 
-if listTraingles is not None:
-    print("Triangoli")
-    print(type(listTraingles))
-    print(listTraingles)
-    #print("Array non vuoto",type(listTraingles))
-    geoJsonObject= {"type":"FeatureCollection","features":
-                [
-                    {
-                        "type":"Feature","properties":
-                            {"stroke":"#C70039","stroke-width":2,"stroke-opacity":1,"fill":"#BEF655","fill-opacity":0.5},
-                        "geometry":{"type":"Polygon","coordinates":listTraingles.tolist()}
-                    }
-                ]
-            }
 
-    #print(type(geoJsonObject))
-    #print(geoJsonObject.__str__().replace("'", '"'))
-    #outputfile=str(filename).replace("coordinates","result")
-    #print("Output File",outputfile)
-    outputfile="result/"+filename.split(".")[0] + "mod.geojson"
-    print(outputfile)
-    #outputfile=filename.split(".")[0] + "mod.geojson"
-    try:
-        with open(outputfile,'w') as f:
-            f.write(str(geoJsonObject.__str__().replace("'", '"')))
-    except Exception as ex:
-        print(str(ex))
-else:
-    print("None")
+    if listTraingles is not None:
+        geoJsonObject1= {"type":"FeatureCollection","features":
+                    [
+                        {
+                            "type":"Feature","properties":
+                                {"stroke":"#C70039","stroke-width":2,"stroke-opacity":1,"fill":"#00FF00","fill-opacity":0.5},
+                            "geometry":{"type":"Polygon","coordinates":listTraingles.tolist()}
+                        }
+                    ]
+                }
+    if triangleMaxPM10 is not None:
+        geoJsonObject2= {"type":"FeatureCollection","features":
+                    [
+                        {
+                            "type":"Feature","properties":
+                                {"stroke":"#C70039","stroke-width":2,"stroke-opacity":1,"fill":"#FF0000","fill-opacity":0.5},
+                            "geometry":{"type":"Polygon","coordinates":triangleMaxPM10.tolist()}
+                        }
+                    ]
+                }
+        
+        outputfile1="result/"+filename.split(".")[0] + "mod.geojson"
+        outputfile2="result/"+filename.split(".")[0] + "modMaxCentraline.geojson"
+
+        print(outputfile1)
+        #outputfile=filename.split(".")[0] + "mod.geojson"
+        try:
+            with open(outputfile1,'w') as f:
+                f.write(str(geoJsonObject1.__str__().replace("'", '"')))
+            with open(outputfile2,'w') as f:
+                f.write(str(geoJsonObject2.__str__().replace("'", '"')))
+        except Exception as ex:
+            print(str(ex))
+    else:
+        print("None")

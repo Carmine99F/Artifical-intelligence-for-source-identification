@@ -13,25 +13,12 @@ def traingulatePolygon(coordinates):
         points = MultiPoint(points=list(pointsCoordinate))
         #print("Point ",type(points))
         poly = Poli([[p.x, p.y] for p in points]) #crea un oggetto Polygon data una serie di coordinate
-        #print(poly.wkt)  # prints: 'POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))'
-        #print("Size point : ", len(points))
-        #print(points)
-        #print("Tipo points",type(points))
+        #print(poly.wkt)   prints: 'POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))'
         triangles=triangulate(points)
         arrayTriangles=[]
         for triangle in triangles:
-            print("Single Triangle")
-            print(triangle)
-            #print("Tipo triangolo",type(triangle))
-            #print(triangle.within(points))
             if triangle.within(poly):
-                #print("è interno")
                 pilitriangle=Poli(triangle)
-                #listCoordinateTriangolo=list(pilitriangle.exterior.coords)
-                #print("Elemento 0")
-                #print(listCoordinateTriangolo[0])
-                #print("PiliTriangle")
-                #print(list(pilitriangle.exterior.coords))
                 arrayTriangles.append(list(pilitriangle.exterior.coords))
             else:
                 print("Non è interno")

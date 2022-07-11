@@ -1,4 +1,4 @@
-from sympy import li
+#from sympy import li
 import requestInformation as ri
 import time
 import  json
@@ -68,6 +68,25 @@ for item in arrayCentraline:
 #controlliamo se almeno uno dei valori del pm10 è maggiore di 50
 if any(i >50 for i in listPm10):
     print("Ok c'è un elemento maggiore di 50")
+    listPm10.sort()
+    listPm10.reverse()
+    print("Array ordinato")
+    print(listPm10)
+    print("Chiave del secondo elemento massimo")
+    firstKey=None
+    secondKey=None
+    thirdKey=None
+    for key,valueJson in jsonCentraline.items():
+        if valueJson["pm10"]==listPm10[0]:
+            firstKey=key
+        if valueJson["pm10"]==listPm10[1]:
+            secondKey=key
+        if valueJson["pm10"]==listPm10[2]:
+            thirdKey=key
+    print("Le chiavi del valori massimi sono ")
+    print("Primo ",firstKey)
+    print("Secondo",secondKey)
+    print("Terzo",thirdKey)
 else:
     print("Non c'è nessun elemento maggiore di 50")
 

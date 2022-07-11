@@ -11,6 +11,8 @@ def getMaxTraingle(coordinates ,maxCoordinate:list):
         pointsCoordinate=np.array(coordinates)
         
         points = MultiPoint(points=list(pointsCoordinate))
+        print("Points ")
+        print(points)
         
         poly = Poli([[p.x, p.y] for p in points]) #crea un oggetto Polygon data una serie di coordinate
         #print(poly.wkt)  # prints: 'POLYGON ((0 0, 1 0, 1 1, 0 1, 0 0))'
@@ -37,13 +39,6 @@ def getMaxTraingle(coordinates ,maxCoordinate:list):
                     print("Ok ci sono")
                 else:
                     print("Non ci sono")
-                """
-                if maxCoordinate in list(pilitriangle.exterior.coords):
-                    print("Ok ci sono")
-                else:
-                    print("Non ci sono")
-                print(list(pilitriangle.exterior.xy))
-                """
             #arrayTriangles.append(list(pilitriangle.exterior.coords))
             else:
                 print("Non è interno")
