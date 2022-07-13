@@ -71,8 +71,8 @@ locationFile=directory+""+filename
 
 jsonCoordinates=geovuoto  
 
-# with open("testauto.geojson","w") as fp:
-#     json.dump(jsonCoordinates,fp)
+with open("testauto.geojson","w") as fp:
+     json.dump(jsonCoordinates,fp)
       
 features=(jsonCoordinates["features"][0])
 geometry=features["geometry"]

@@ -16,8 +16,8 @@ def getInfo(nameCentralina):
         "format":"json",
         "fonti":"ssq",
         "req_centr":nameCentralina,
-        "start_date":"2022-03-29",
-        "end_date":"2022-03-29"
+        "start_date":"2022-03-27",
+        "end_date":"2022-03-27"
     }
     response=requests.post(url,data=dati)
     if response.text != "":

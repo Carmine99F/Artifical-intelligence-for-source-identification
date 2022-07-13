@@ -12,13 +12,14 @@ se esiste almeno un valore > 50 di pm10 ci facciamo restituire le coordinate del
 """
 def getMaxCoordinates(arrayCentraline:list,infoCentraline:dict):
     jsonCentraline={}
-    listPm10=[]  #questo array servirà per il controllare se tra tutti i pm10 c'è almeno un valore > 50
+    listPm10=[]  #questo array servirà per  controllare se tra tutti i pm10 c'è almeno un valore > 50
     for item in arrayCentraline:
         objectInfo=ri.getInfo(item)
         if objectInfo is not None:
             listPm10.append(objectInfo["pm10"])
             jsonCentraline.update({item:objectInfo})
-    if any(i>50 for i in listPm10):
+            print(jsonCentraline)
+    if any(i>0 for i in listPm10):
         print("C'è un elemento maggiore di 50")
         maxPm10=list(jsonCentraline.values())[0]["pm10"]
         maxKey=list(jsonCentraline.keys())[0]
