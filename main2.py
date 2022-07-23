@@ -42,48 +42,7 @@ geovuoto={
      }
    ]
 }
-"""
-trianglesGeojson= {
-        "type":"FeatureCollection",
-        "features":[
-            {
-                "type":"Feature",
-                "properties":{
-                        "stroke":"#C70039",
-                        "stroke-width":2,
-                        "stroke-opacity":1,
-                        "fill":"#00FF00",
-                        "fill-opacity":0.5
-                    },
-                    "geometry":{
-                            "type":"Polygon",
-                            "coordinates":[]
-                        }
-            }
-        ]
-    }
-"""
-"""
-triangleMaxPM10Geojson={
-        "type":"FeatureCollection",
-        "features":[
-            {
-                "type":"Feature",
-                "properties":{
-                        "stroke":"#C70039",
-                        "stroke-width":2,
-                        "stroke-opacity":1,
-                        "fill":"#FF0000",
-                        "fill-opacity":0.5
-                    },
-                    "geometry":{
-                            "type":"Polygon",
-                            "coordinates":[]
-                        }
-            }
-        ]
-    }
-"""
+
 for item in arrayCentraline:
      print(item)
      #ci prendiamo lat e lon dal backend per ogni sensore

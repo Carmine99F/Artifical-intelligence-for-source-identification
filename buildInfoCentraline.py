@@ -3,6 +3,10 @@ import requestInformation as ri
 import json
 
 
+
+"""_summary_
+Al geojson in input aggiunge gli oggetti che rappresentano i punti dei vertici
+ """
 def getGeojsonCentralineWithPoints(infoCentraline:dict,geovuoto:dict):
   for key,value in infoCentraline.items():
     dictInfoKey=ri.getInfo(key)
@@ -39,7 +43,7 @@ def getGeojsonCentralineWithPoints(infoCentraline:dict,geovuoto:dict):
 
       
 
-
+"""
 arrayCentraline=['ITCAMMON134567','ITCAMMON234567','ITCAMMON334567','ITCAMMON444567']
 infoCentraline={
      "ITCAMMON134567":{
@@ -115,12 +119,12 @@ for key,value in infoCentraline.items():
         
         #newFormat=formatNewData
         #print(newFormat)
-        """
-        arrayCoordinate=[value["lon"],value["lat"]]
-        newFormat["properties"].update(dictInfoKey)
-        newFormat["geometry"].update({"coordinates":arrayCoordinate})
-        geovuoto["features"].append(newFormat)
-        """
+    
+        #arrayCoordinate=[value["lon"],value["lat"]]
+        #newFormat["properties"].update(dictInfoKey)
+        #newFormat["geometry"].update({"coordinates":arrayCoordinate})
+        #geovuoto["features"].append(newFormat)
+
         formatNewData={
             "type": "Feature",
             "properties": dictInfoKey,
@@ -154,12 +158,5 @@ for key,value in infoCentraline.items():
             }
         }
         geovuoto["features"].append(formatNewData)        
-
+"""
         
-
-# print("Test 1")
-# print(geovuoto["features"][1])
-# print("Test 2")
-# print(geovuoto["features"][2])
-# with open("geoTest.geojson","w") as fp:
-#      json.dump(geovuoto,fp)

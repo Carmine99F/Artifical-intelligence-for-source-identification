@@ -18,9 +18,9 @@ def getMaxCoordinates(arrayCentraline:list,infoCentraline:dict):
         if objectInfo is not None:
             listPm10.append(objectInfo["pm10"])
             jsonCentraline.update({item:objectInfo})
-            print(jsonCentraline)
+            #print(jsonCentraline)
     if any(i>0 for i in listPm10):
-        print("C'è un elemento maggiore di 50")
+        #print("C'è un elemento maggiore di 50")
         maxPm10=list(jsonCentraline.values())[0]["pm10"]
         maxKey=list(jsonCentraline.keys())[0]
         listPm10.sort()
@@ -40,7 +40,7 @@ def getMaxCoordinates(arrayCentraline:list,infoCentraline:dict):
         coordinateThirdCentralina=[infoCentraline[thirdKey]["lon"],infoCentraline[thirdKey]["lat"]]
         return coordinateFirstCentralina,coordinateSecondCentralina,coordinateThirdCentralina
     else:
-        print("Non c'è nessun elemento maggiore di 50")
+        #print("Non c'è nessun elemento maggiore di 50")
         return None,None,None
 
 

@@ -16,20 +16,26 @@ def getInfo(nameCentralina):
         "format":"json",
         "fonti":"ssq",
         "req_centr":nameCentralina,
-        "start_date":"2022-03-27",
-        "end_date":"2022-03-27"
+        "start_date":"2022-01-04",
+        "end_date":"2022-01-04"
     }
     response=requests.post(url,data=dati)
     if response.text != "":
         arrayInfoCentraline=[]
         infoJson=json.loads(str(response.text))
-        dataJson={
-                "direzione_vento":float(infoJson["direzione_vento"]),
-                "gas_resistance":float(infoJson["gas_resistance"]),
-                "intensita_vento":float(infoJson["intensita_vento"]),
-                "pm10":float(infoJson["pm10"]),
-                "pm2_5":float(infoJson["pm2_5"])
-        }
+        dataJson={}
+        if "direzione_vento" in infoJson.keys():
+            dataJson["direzione_vento"]=float(infoJson["direzione_vento"])
+        if "gas_resistance" in infoJson.keys():
+            dataJson["gas_resistance"]=float(infoJson["gas_resistance"])
+        if "intensita_vento" in infoJson.keys():
+            dataJson["intensita_vento"]=float(infoJson["intensita_vento"])
+        if "pm10" in infoJson.keys():
+            dataJson["pm10"]=float(infoJson["pm10"])
+        if "pm2_5" in infoJson.keys():
+            dataJson["pm2_5"]=float(infoJson["pm2_5"])
+        if "ID" in infoJson.keys():
+            dataJson["id"]=infoJson["ID"]
         return dataJson
     else:
         print("Response vuota")
