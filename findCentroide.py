@@ -11,7 +11,6 @@ import angoli as angle
 import math
 
 def getCntroide(coordinates:list):
-    
     polygon=Poli(coordinates) #non toccare
     x,y=polygon.centroid.xy
     return list(polygon.centroid.coords)
