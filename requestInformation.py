@@ -16,8 +16,8 @@ def getInfo(nameCentralina):
         "format":"json",
         "fonti":"ssq",
         "req_centr":nameCentralina,
-        "start_date":"2022-01-04",
-        "end_date":"2022-01-04"
+        "start_date":"2022-01-08",
+        "end_date":"2022-01-08"
     }
     response=requests.post(url,data=dati)
     if response.text != "":
@@ -26,6 +26,7 @@ def getInfo(nameCentralina):
         dataJson={}
         if "direzione_vento" in infoJson.keys():
             dataJson["direzione_vento"]=float(infoJson["direzione_vento"])
+            dataJson["direzione_vento_gradi"]=float(infoJson["direzione_vento"])*22.5
         if "gas_resistance" in infoJson.keys():
             dataJson["gas_resistance"]=float(infoJson["gas_resistance"])
         if "intensita_vento" in infoJson.keys():
