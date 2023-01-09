@@ -3,12 +3,13 @@ from typing import List
 from math import acos,pi,sqrt
 """
     Dopo aver calcolato l'ampiezza di tutti i vertici, costruiamo un json che associa ah ogni nome di centralina
-    l'ampizza del proprio angolo interno, mettiamo solo gli angoli delle centraline che rappretano i 3 valori massimi di pm10
+    l'ampizza del proprio angolo interno, mettiamo solo gli angoli delle centraline che rappresentano i 3 valori massimi di pm10
     in parametro infoCentraline è un dizionario che contiene le seguenti informazioniù
     Nome Centralina: {lat e lon}
 """
 
 def lenghtSquare(x,y):
+    #print(x," x" , y ," y ")
     xDifference=x[0]-y[0]
     yDifference=x[1]-y[1]
     z=(xDifference*xDifference)+(yDifference*yDifference)
@@ -26,6 +27,7 @@ def getAngle_sss(max1,max2,max3,infoCentraline:dict):
     max_2=math.sqrt(max2Square)
     max_3=math.sqrt(max3Square)
     #Per la legge del coseno
+    #print("max2Square ",max2Square,"max3Square ",max3Square,"max1Square ",max1Square,"max_1 ",max_1,"max_2",max_2)
     alpha=math.acos((max2Square+ max3Square - max1Square)/(2*max_2*max_3))
     beta=math.acos((max1Square+ max3Square - max2Square)/(2*max_1*max_3))
     gamma=math.acos((max1Square+ max2Square - max3Square)/(2*max_1*max_2))

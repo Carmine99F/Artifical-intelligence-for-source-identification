@@ -1,4 +1,5 @@
 #from sympy import li
+from distutils.command.config import config
 import requestInformation as ri
 import time
 import json
@@ -55,7 +56,7 @@ for item in arrayCentraline:
     # arraycoo=[infoCentraline[item]["lon"],infoCentraline[item]["lat"]]
     # geovuoto["features"][0]['geometry']["coordinates"][0].append(arraycoo)
     # contiene la lista dei valori lkegati al pm e al vento senza il nome della centralina
-    objectInfo = ri.getInfo(item)
+    objectInfo = ri.getInfo(item,config.data,config.data)
     #print("Type objectInfo",type(objectInfo))
     # print(objectInfo)
     if objectInfo is not None:

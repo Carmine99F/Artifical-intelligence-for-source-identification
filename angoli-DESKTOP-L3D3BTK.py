@@ -15,7 +15,7 @@ def lenghtSquare(x,y):
 def getAngle_sss(max1,max2,max3,infoCentraline:dict):
     #Quadrati
     max1Square=lenghtSquare(max2,max3)
-    print("max1Square",max1Square)
+    #print("max1Square",max1Square)
     max2Square=lenghtSquare(max1,max3)
     max3Square=lenghtSquare(max1,max2)
     
@@ -44,7 +44,7 @@ def getAngle_sss(max1,max2,max3,infoCentraline:dict):
         if value["lon"]==max3[0] and value["lat"]==max3[1]:
             jsonAngleCentraline[key]=int(gamma)
          
-    print(jsonAngleCentraline)
+    #print(jsonAngleCentraline)
     return jsonAngleCentraline
     
     
