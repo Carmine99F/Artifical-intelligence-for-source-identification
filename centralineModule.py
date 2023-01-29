@@ -1,5 +1,3 @@
-from logging import exception
-from shutil import ExecError
 import requestInformation as ri
 import json
 import config
@@ -17,7 +15,8 @@ def getMaxCoordinates(arrayCentraline:list,infoCentraline:dict):
     jsonCentraline={}
     listPm10=[]  #questo array servirà per  controllare se tra tutti i pm10 c'è almeno un valore > 50
     for item in arrayCentraline:
-        objectInfo=ri.getInfo(item,config.data,config.data)
+        #objectInfo=ri.getInfo(item,config.data,config.data)
+        objectInfo=config.dizMediaGiornaliera[item]
         if objectInfo is not None:
             listPm10.append(objectInfo["pm10"])
             jsonCentraline.update({item:objectInfo})
@@ -31,18 +30,52 @@ def getMaxCoordinates(arrayCentraline:list,infoCentraline:dict):
         secondKey=None
         thirdKey=None
         for keyCentralina,info in jsonCentraline.items():
+            #print("key centraline",keyCentralina)
             if info["pm10"]==listPm10[0]:
                 firstKey=keyCentralina
+                config.nomeCentralina1=str(keyCentralina)
             if info["pm10"]==listPm10[1]:
                 secondKey=keyCentralina
+                config.nomeCentralina2=str(keyCentralina)
             if info["pm10"]==listPm10[2]:
                 thirdKey=keyCentralina
+                config.nomeCentralina3=str(keyCentralina)
         coordinateFirstCentralina=[infoCentraline[firstKey]["lon"],infoCentraline[firstKey]["lat"]]
         coordinateSecondCentralina=[infoCentraline[secondKey]["lon"],infoCentraline[secondKey]["lat"]]
         coordinateThirdCentralina=[infoCentraline[thirdKey]["lon"],infoCentraline[thirdKey]["lat"]]
         return coordinateFirstCentralina,coordinateSecondCentralina,coordinateThirdCentralina
     else:
         raise Exception("Non c'è nessun elemento maggiore di 0")
-       #Ritorna None
 
+
+def getMaxCoordinates2(arrayCentraline:list,infoCentraline:dict):
+    jsonCentraline={}
+    listPm10=[]  #questo array servirà per  controllare se tra tutti i pm10 c'è almeno un valore > 50
+    for key,item in config.dizMediaGiornaliera.items():
+        listPm10.append(item["pm10"])
+        jsonCentraline.update({key:item})
+    if any(i>0 for i in listPm10):
+        listPm10.sort()
+        listPm10.reverse()
+        config.valueMaxPm10=listPm10[0]
+        firstKey=None
+        secondKey=None
+        thirdKey=None
+        for keyCentralina,info in jsonCentraline.items():
+            #print("key centraline",keyCentralina)
+            if info["pm10"]==listPm10[0]:
+                firstKey=keyCentralina
+                config.nomeCentralina1=str(keyCentralina)
+            if info["pm10"]==listPm10[1]:
+                secondKey=keyCentralina
+                config.nomeCentralina2=str(keyCentralina)
+            if info["pm10"]==listPm10[2]:
+                thirdKey=keyCentralina
+                config.nomeCentralina3=str(keyCentralina)
+        coordinateFirstCentralina=[config.dizMediaGiornaliera[firstKey]["lon"],config.dizMediaGiornaliera[firstKey]["lat"]]
+        coordinateSecondCentralina=[config.dizMediaGiornaliera[secondKey]["lon"],config.dizMediaGiornaliera[secondKey]["lat"]]
+        coordinateThirdCentralina=[config.dizMediaGiornaliera[thirdKey]["lon"],config.dizMediaGiornaliera[thirdKey]["lat"]]
+        return coordinateFirstCentralina,coordinateSecondCentralina,coordinateThirdCentralina
+    else:
+        raise Exception("Non c'è nessun elemento maggiore di 0")
 

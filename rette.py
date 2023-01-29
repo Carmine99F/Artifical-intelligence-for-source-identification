@@ -2,9 +2,9 @@ from shapely.geometry import LineString
 from shapely.affinity import rotate
 import config
 import hourlyAverages as ha
-import time
+import json
 import math
-
+import calcoloProbabilità as cp
 
 def getColorMarker(pm10):
     color=""
@@ -13,7 +13,7 @@ def getColorMarker(pm10):
     if pm10==10:
         color="#ADFF2F"
     if pm10> 10 and pm10<20:
-        color="##F7FF76"
+        color="#F7FF76"
     if pm10==20:
         color="#EEFE00"
     if pm10>20 and pm10<30:
@@ -28,7 +28,21 @@ def getColorMarker(pm10):
         color="#C70300"
     return color 
 
+def getHourlyProability(orario):
+    dizHourly1:dict=config.dizMediaOraria[config.nomeCentralina1]
+    dizHourly2:dict=config.dizMediaOraria[config.nomeCentralina2]
+    dizHourly3:dict=config.dizMediaOraria[config.nomeCentralina3]
+    if orario in dizHourly1.keys()  and orario in dizHourly2.keys() and orario in dizHourly3.keys():
+        direzioneC1=config.dizMediaOraria[config.nomeCentralina1][orario]["direzione"]
+        direzioneC2=config.dizMediaOraria[config.nomeCentralina2][orario]["direzione"]
+        direzioneC3=config.dizMediaOraria[config.nomeCentralina3][orario]["direzione"]
+        prob=cp.getRange(dirVentoC1=float(direzioneC1),dirVentoC2=float(direzioneC2),dirVentoC3=float(direzioneC3))
+    #print("prob  ", prob)
+        return prob
+    return 0
+    #print(direzioneC1,direzioneC2,direzioneC3)
 
+#getHourlyProability("10:00")
 """_summary_
     La funziona getInfo retituisce un dizionario con le info relative la media oraria della centralina cmax1
     in arrayDizionario vengono inseriti tutti i valori delle direzioni del vento
@@ -41,11 +55,9 @@ def getColorMarker(pm10):
     Returns:
         list: InfoPoint è un dizionario con le informazioni relative al marker, dp
 """
-def getMarker(idLine:int,jsonCoordinate:dict,nameCentraline)->list:
-    #dictSensor=ha.getInfo(nameCentralina=config.nomeMaxCentralina,data1=config.data,data2=config.data)
-    dictSensor=ha.getInfo(nameCentralina=nameCentraline,data1=config.data,data2=config.data)
-
-    arrayDirezioni=[]
+def getMarker(idLine:int,dictSensor: dict)->list:
+   
+    arrayDirezioni=[] #è un array che contiene tutti i valori delle direzioni del vento
     for key,item in dictSensor.items():
         arrayDirezioni.append(round(float(item["direzione"])))
         
@@ -63,32 +75,34 @@ def getMarker(idLine:int,jsonCoordinate:dict,nameCentraline)->list:
     if idLine in arrayDirezioni:
         arrayPm10=[]
         intensitaVento=0
+        #print("All keys ",json.dumps(dictSensor,indent=2))
         for key,item in dictSensor.items():   #dictSensore = {orario:{pm:"", direzione="",dp}}
             direzione=(round(float(item["direzione"])))
+           #print("key ",key)
+            probabilitaOraria:float=getHourlyProability(key)
+            item["ph"]=probabilitaOraria
             if idLine == direzione:
-                print("Item ", item)
                 infoPoint["properties"].update({str(key):str(item)})
-                arrayPm10.append(float(item["pm10"]))
-           
-            orario=key
+                arrayPm10.append(float(item["pm10"]))  # l'array di dp serve per il dp
+                
         codeColor=getColorMarker(max(arrayPm10))
         dp=ha.getDP(max(arrayPm10))
         #cs=getConcentrazioneSorgente(intensitaVento,orario,dp)
         infoPoint["properties"].update({"marker-color":str(codeColor)})
-        print("Info point ",infoPoint)
-        #print("dp ",dp)
         return infoPoint,dp
     return None,None
 
-def addLineWithMarker(maxCentralina:list,jsonCoordinate:dict,name: str):
+"""
+    Questa funzione aggiunge alla centralina identificata dal parametro name le rette e i marker 
+"""
+def addLineWithMarker(maxCentralina:list,jsonCoordinate:dict,name:str):
     degressInclination=0
-    #lineCoordinate1=lineInclination.coords.xy[0].tolist()
-    #lineCoordinate2=lineInclination.coords.xy[1].tolist()
+     #Dizionario relativo alla centralina name che contine le infomrmazioni relative  a ogni ora 
+    dictSensor=config.dizMediaOraria[name]
     for i in range(16):
         degressInclination=degressInclination+22.5
-        infoPoint,dp=getMarker(int(i+1),jsonCoordinate,name)
-        #print("Info point ",infoPoint)
-        #print("dp ",dp)
+        infoPoint,dp=getMarker(idLine= int(i+1),dictSensor=dictSensor)
+       
         if infoPoint is not None and dp is not None:
             point1LonCmax1=maxCentralina[0]
             point1LatCmax1=maxCentralina[1]+((dp/100000))
@@ -128,19 +142,15 @@ def addLineWithMarker(maxCentralina:list,jsonCoordinate:dict,name: str):
             jsonCoordinate["features"].append(infoPoint)
 
         
-        """
-        lineInclination=rotate(line,degressInclination,origin=maxCentraline)
-        newCoord1=lineInclination.coords.xy[0].tolist()
-        newCoord2=lineInclination.coords.xy[1].tolist()
-        """
-        
-        
         
     """
     dp per la media giornaliera
     """
 def getDpLineNordToCmax1():
-    dictSensor=ha.getInfo(nameCentralina=config.nomeMaxCentralina,data1=config.data,data2=config.data)
+    #dictSensor=ha.getInfo(nameCentralina=config.nomeMaxCentralina,data1=config.data,data2=config.data)
+    dictSensor=config.dizMediaOraria[config.nomeMaxCentralina]
+    #print("stampa")
+    #print(dictSensor)
     arrayPm10=[]
     for key,item in dictSensor.items():
         arrayPm10.append(float(item["pm10"]))

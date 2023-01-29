@@ -2,7 +2,7 @@
 
 #Ritorna i gradi del vento della centralina più espostata al pm10
 def getGradiVentoMaxCentraline(geojson:dict,coordinates:list):
-    print("Gradi vento ")
+    #print("Gradi vento ")
     for key in geojson["features"]:
         try:
             if key["geometry"]["type"]=="Point":
@@ -13,6 +13,7 @@ def getGradiVentoMaxCentraline(geojson:dict,coordinates:list):
                   #print(key["properties"]["direzione_vento_gradi"])
                   return key["properties"]["direzione_vento_gradi"]
                 else:
-                  print("non uguali")
+                  pass
+                  #print("non uguali")
         except Exception as execption:
             pass
